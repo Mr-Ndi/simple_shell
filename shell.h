@@ -25,7 +25,7 @@ char *_strcpy(char *dest, char *src);
 int count(char *p);
 char **alloc(int j, int wlength[]);
 void prompt(void);
-void exiting(char **);
+void exiting(char **, char *);
 int _atoi(char *s);
 int _strcmp(char *s1, char *s2);
 #endif

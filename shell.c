@@ -16,10 +16,11 @@ int main(void)
 	{
 		truth = 0;
 		path = NULL;
+		argv = arg = NULL;
 		if (*line != '\n')
 		{
 			argv = strtow(line);
-			exiting(argv);
+			exiting(argv, line);
 			if (argv[0][0] != '/')
 				arg = path_tok(str, _strlen(argv[0]), argv[0]);
 			path = stat_arg(arg);
