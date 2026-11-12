@@ -85,6 +85,42 @@ $ cat commands.txt | ./hsh
 - The only built-in is `exit` (no `env`, `cd`, `setenv`, …)
 - No pipes, redirections, `;`, `&&`, `||`, variables or aliases
 
+## Contributing
+
+Contributions are welcome! Pick one of the open tasks below, or suggest your own.
+
+### Known bugs
+
+- **`exit <status>` crashes the shell.** Typing a command such as `exit 3` causes a segmentation fault. In `exiting.c`, `argv` is freed before `argv[1]` is read. Saving the status first fixes it:
+  ```c
+  int status = _atoi(argv[1]);
+  free(line);
+  free_args(argv, count_args(argv));
+  exit(status);
+  ```
+
+### Feature ideas
+
+- `env` built-in to print the environment
+- `cd` built-in, with `cd -` and `cd` to `$HOME`
+- `setenv` and `unsetenv` built-ins
+- Command separator `;` and logical operators `&&` and `||`
+- Variable replacement (`$?`, `$$`, `$PATH`)
+- Comments (`#`)
+- Running commands from a file (`./hsh script.sh`)
+- First release tag (`v1.0.0`) once the bug above is fixed
+
+### How to contribute
+
+1. Fork the repository and create a branch: `git checkout -b fix-exit-status`
+2. Make your changes and keep the [Betty](https://github.com/alx-tools/Betty) coding style.
+3. Check that it still builds without warnings:
+   ```sh
+   gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
+   ```
+4. Test it in interactive and non-interactive mode, and check for memory leaks with `valgrind ./hsh`.
+5. Commit, push your branch and open a pull request that explains what you changed.
+
 ## Authors
 
 - **Clement Mugisha** – <clmntmugisha@gmail.com>
