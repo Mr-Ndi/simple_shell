@@ -25,6 +25,10 @@ gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
 
 ## Usage
 
+**Demo**
+
+![simple_shell running ls, lsd, whoami, pwd and exit](assets/demo.png)
+
 **Interactive mode**
 
 ```sh
