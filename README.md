@@ -1,15 +1,89 @@
-﻿This is the simple shell directory which includes all tasks of the simple shell project
+﻿# simple_shell
 
-and that project is all about developing a unix or unix like operating system terminal
+A minimal UNIX command-line interpreter written in C, modelled on `/bin/sh`.
+Built as the Simple Shell project of the ALX Software Engineering programme.
 
-Authors
+## Features
 
-this project has been created and of course written by 2 alx software developer those young students are :
+- Interactive mode with a `$ ` prompt, and non-interactive mode (commands piped from stdin)
+- Runs commands by absolute path (`/bin/ls`) or by name, searched in `PATH` (`ls`)
+- Passes arguments to commands (`ls -l /tmp`)
+- Built-in `exit` and `exit <status>`
+- Handles end-of-file (`Ctrl+D`) and prints an error for commands it can't find
+- Its own string helpers (`_strlen`, `_strcat`, `_strcmp`, `_atoi`, …) instead of most of the standard library
 
-1. Mugisha Clement
-			  ---------------| his email : clmntmugisha@gmail.com
+## Requirements
 
-2.Ndiramiye Ninshuti Poli
-			 ----------------| his email : onlythenotes@gmail.com
+- Linux or another UNIX-like OS
+- `gcc`
 
-In addition this was our first project together. it was started on 1st/Nov/2023 and ended on 16th/Nov/2023
+## Compilation
+
+```sh
+gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
+```
+
+## Usage
+
+**Interactive mode**
+
+```sh
+$ ./hsh
+$ ls -l
+total 104
+-rw-rw-r-- 1 user user  583 Nov 12 10:36 alloc.c
+...
+$ /bin/pwd
+/home/user/simple_shell
+$ exit
+```
+
+**Non-interactive mode**
+
+```sh
+$ echo "ls" | ./hsh
+alloc.c  atoi.c  AUTHORS  ...
+$ cat commands.txt | ./hsh
+```
+
+## How it works
+
+1. `prompt()` prints `$ ` when stdin is a terminal.
+2. `getline()` reads a line, and `strtow()` splits it into words.
+3. `exiting()` handles the `exit` built-in.
+4. If the command doesn't start with `/`, `path_tok()` builds a candidate path for each `PATH` directory, and `stat_arg()` picks the first one that exists.
+5. `forking()` forks. The child runs the program with `execve()` and the parent waits for it.
+6. The argument arrays are freed and the loop starts again.
+
+## Project structure
+
+| File | Description |
+|------|-------------|
+| `shell.c` | Entry point and main read–execute loop |
+| `shell.h` | Header with includes and prototypes |
+| `display.c` | `prompt` – prints the prompt in interactive mode |
+| `strtow.c` | `strtow` – splits a line into words |
+| `get_path.c` | `get_path` – reads an environment variable |
+| `path_tok.c` | `path_tok` – builds full paths from `PATH` |
+| `stat_arg.c` | `stat_arg` – returns the first path that exists |
+| `reallocate_arg.c` | `reallocate_arg` – swaps a command name for its full path |
+| `forking.c` | `forking` – forks and waits for the child |
+| `ex.c` | `ex` – runs the command with `execve` |
+| `exiting.c` | `exiting` – the `exit` built-in |
+| `alloc.c` | `alloc` – allocates a 2D array of words |
+| `free_args.c` | `free_args` – frees a 2D array |
+| `count.c` | `count_args` – counts array entries |
+| `counter.c` | `count` – measures the length of a word |
+| `_strlen.c`, `_strcat.c`, `strcpy.c`, `strcmp.c`, `_strncmp.c`, `atoi.c` | String helpers |
+
+## Limitations
+
+- The only built-in is `exit` (no `env`, `cd`, `setenv`, …)
+- No pipes, redirections, `;`, `&&`, `||`, variables or aliases
+
+## Authors
+
+- **Clement Mugisha** – <clmntmugisha@gmail.com>
+- **Poli Ninshuti Ndiramiye** – <onlythenotes@gmail.com>
+
+See [AUTHORS](AUTHORS). Our first project together, built between 1 and 16 November 2023.
