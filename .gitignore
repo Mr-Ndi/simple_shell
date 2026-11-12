@@ -1,0 +1,6 @@
+# Compiled shell
+hsh
+
+# Object files and core dumps
+*.o
+core
